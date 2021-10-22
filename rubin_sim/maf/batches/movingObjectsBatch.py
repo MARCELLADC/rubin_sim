@@ -1003,8 +1003,8 @@ def plotFractions(bdictFractions, figroot=None, resultsDb=None,
             b.plotDict['linestyle'] = ':'
             b.plotDict['linewidth'] = 3
 
+    first = bdictFractions[list(bdictFractions.keys())[0]]
     if figroot is None:
-        first = bdictFractions[list(bdictFractions.keys())[0]]
         figroot = first.runName
     displayDict = deepcopy(first.displayDict)
     displayDict['subgroup'] = f'{first.displayDict["subgroup"]} Pop. Fraction'
@@ -1060,10 +1060,9 @@ def plotActivity(bdict, figroot=None, resultsDb=None, outDir='.', figformat='pdf
             if 'days' in k:
                 activity_days[k] = bdict[k]
 
+    first = bdict[list(bdict.keys())[0]]
     if figroot is None:
-        first = bdict[list(bdict.keys())[0]]
         figroot = first.runName
-
     displayDict = deepcopy(first.displayDict)
 
     if len(activity_days) > 0:

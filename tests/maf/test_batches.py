@@ -34,6 +34,12 @@ class TestBatches(unittest.TestCase):
         ack = batches.astrometryBatch()
         ack = batches.rapidRevisitBatch()
 
+    def test_movingObjectsBatches(self):
+        ack = batches.quickDiscoveryBatch()
+        ack = batches.discoveryBatch()
+        ack = batches.characterizationInnerBatch()
+        ack = batches.characterizationOuterBatch()
+
     @unittest.skipUnless(os.path.isdir(os.path.join(get_data_dir(), 'maf')),
                      "Skipping scienceRadarBatch test because operating without full MAF test data")
     def test_scienceRadar(self):

@@ -478,17 +478,17 @@ class PulsatingStarRecovery(maf.BaseMetric):
         time_0=time_model[0]
 
         for i in range(len(u_mod)):
-            u_model.append(u_mod[i]+dmod+1.55607*3.1*ebv)
+            u_model.append(u_mod[i]+dmod+1.52698*3.1*ebv)
         for i in range(len(g_mod)):
-            g_model.append(g_mod[i]+dmod+1.18379*3.1*ebv)
+            g_model.append(g_mod[i]+dmod+1.17450*3.1*ebv)
         for i in range(len(r_mod)):
-            r_model.append(r_mod[i]+dmod+1.87075*3.1*ebv)
+            r_model.append(r_mod[i]+dmod+0.8666*3.1*ebv)
         for i in range(len(i_mod)):
-            i_model.append(i_mod[i]+dmod+0.67897*3.1*ebv)
+            i_model.append(i_mod[i]+dmod+0.67638*3.1*ebv)
         for i in range(len(z_mod)):
-            z_model.append(z_mod[i]+dmod+0.51683*3.1*ebv)
+            z_model.append(z_mod[i]+dmod+0.51614*3.1*ebv)
         for i in range(len(y_mod)):
-            y_model.append(y_mod[i]+dmod+0.42839*3.1*ebv)
+            y_model.append(y_mod[i]+dmod+0.42545*3.1*ebv)
  
         
 #compute the intensity means

@@ -153,6 +153,11 @@ class PulsatingStarRecovery(maf.BaseMetric):
         # The following not consider the blend. 
         #################################################
         
+        
+        ###############################
+        #Start of  LcConstructor block#
+        ###############################
+        
          #the function self.generateLC generate the temporal series and simulate light curve    
         LcTeoLSST=self.generateLC(time_lsst,filters_lsst,lcModel_noblend)
         
@@ -170,8 +175,14 @@ class PulsatingStarRecovery(maf.BaseMetric):
         #2) the uniformity parameters from Barry F. Madore and Wendy L. Freedman 2005 ApJ 630 1054 (uniformity_X)  useful for n_X<20
         #3) a modified version of UniformityMetric by Peter Yoachim (https://sims-maf.lsst.io/_modules/lsst/sims/maf/metrics/cadenceMetrics.html#UniformityMetric.run). Calculate how uniformly the observations are spaced in phase (not time)using KS test.Returns a value between 0 (uniform sampling) and 1 . uniformityKS_X
 
+       
+        
         period_model=LcTeoLSST['p_model']
         uni_meas=self.Lcsampling(LcTeoLSST_noised,period_model,index_notsaturated,self.factorForDimensionGap)
+        
+        #############################
+        #End of  LcConstructor block#
+        #############################
         
         #the function 'LcPeriod' analyse the periodogram with Gatspy and gives:
         #1)the best period (best_per_temp)
@@ -219,37 +230,17 @@ class PulsatingStarRecovery(maf.BaseMetric):
         else:
             lcModel_blend=self.ReadTeoSim_blend(self.df,self.lcModel_ascii,dmod,ebv1)
             
-            
+            #Start LcConstructor#
             LcTeoLSST_blend=self.generateLC(time_lsst,filters_lsst,lcModel_blend)
-        
-        #the function 'noising' compute and add errors
             snr_blend=self.retrieveSnR(mv,lcModel_blend) 
-            LcTeoLSST_noised_blend=self.noising(LcTeoLSST_blend,snr_blend,self.sigmaFORnoise,[0.,0.,0.,0.,0.,0.])  
-        
-        
-        #the function 'count_saturation' build an index to exclude saturated stars and those under detection limit.                                       
+            LcTeoLSST_noised_blend=self.noising(LcTeoLSST_blend,snr_blend,self.sigmaFORnoise,[0.,0.,0.,0.,0.,0.])                               
             index_notsaturated_blend,saturation_index_blend,detection_index_blend=self.count_saturation(mv,snr_blend,LcTeoLSST_blend,LcTeoLSST_noised_blend,self.do_remove_saturated)
-        
-        
-        #The function 'Lcsampling' analize the sampling of the simulated light curve. Give a dictionary with UniformityPrameters obtained with three different methods
-        #1) for each filter X calculates the number of points (n_X), the size in phase of the largest gap (maxGap_X) and the number of gaps largest than factorForDimensionGap*maxGap_X (numberGaps_X)
-        #2) the uniformity parameters from Barry F. Madore and Wendy L. Freedman 2005 ApJ 630 1054 (uniformity_X)  useful for n_X<20
-        #3) a modified version of UniformityMetric by Peter Yoachim (https://sims-maf.lsst.io/_modules/lsst/sims/maf/metrics/cadenceMetrics.html#UniformityMetric.run). Calculate how uniformly the observations are spaced in phase (not time)using KS test.Returns a value between 0 (uniform sampling) and 1 . uniformityKS_X
-
             period_model_blend=LcTeoLSST_blend['p_model']
             uni_meas_blend=self.Lcsampling(LcTeoLSST_noised_blend,period_model_blend,index_notsaturated_blend,self.factorForDimensionGap)
-            
-        #the function 'LcPeriod' analyse the periodogram with Gatspy and gives:
-        #1)the best period (best_per_temp)
-        #2)the difference between the recovered period and the  model's period(P) and
-        #3)diffper_abs=(DeltaP/P)*100
-        #4)diffcicli= DeltaP/P*1/number of cycle
+            #End LcConstructor#
+       
             best_per_temp_blend,diffper_blend,diffper_abs_blend,diffcicli_blend=self.LcPeriodLight(mv,LcTeoLSST_blend,LcTeoLSST_noised_blend,index_notsaturated_blend)
             period_blend=best_per_temp_blend #or period_model or fitLS_multi.best_period
-        #period=LcTeoLSST['p_model']
-        
-        #The function 'LcFitting' fit the simulated light curve with number of harmonics=numberOfHarmonics.Return a dictionary with mean magnitudes, amplitudes and chi of the fits
-        
             finalResult_blend=self.LcFitting(LcTeoLSST_noised_blend,index_notsaturated_blend,period_blend,self.numberOfHarmonics)
         
         #Some useful figure of merit on the recovery of the:
@@ -589,7 +580,7 @@ class PulsatingStarRecovery(maf.BaseMetric):
         for i in range(len(g_mod_blend)):
             g_model_blend.append(g_mod_blend[i]+dmod+1.18379*3.1*ebv)
         for i in range(len(r_mod_blend)):
-            r_model_blend.append(r_mod_blend[i]+dmod+1.87075*3.1*ebv)
+            r_model_blend.append(r_mod_blend[i]+dmod+0.87075*3.1*ebv)
         for i in range(len(i_mod_blend)):
             i_model_blend.append(i_mod_blend[i]+dmod+0.67897*3.1*ebv)
         for i in range(len(z_mod_blend)):
